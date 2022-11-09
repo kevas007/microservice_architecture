@@ -19,7 +19,7 @@ server.config["MYSQL_PORT"] = os.environ.get("MYSQL_PORT")
 def login():
 	auth = request.authorisation
 	if not  auth :
-		return "missing credentails" , 401
+		return "missing credentails auth" , 401
 	# check db for username and password
 	cur  = mysql.connection.cursor()
 	res  = cur.execute(
@@ -30,11 +30,28 @@ def login():
 		email = user_row[0]
 		password = user_row[1]
 		if auth.username != email or  auth.password != passord:
-			return "invalid credentials", 401
+			return "invalid credentials username or password", 401
 		else:
 			return  createJWT(auth.username, os.environ.get("JWT_SECRET"), True)		
 	else:
     		return "invalide credentials", 401
+
+@server.route("/validate", methode=["POST"])
+
+def validate():
+	encoded_jwt = request.headers["Authorization"]
+	
+	if not  encoded_jwt:
+		return "missing credentails JWT ", 401
+	encoded_jwt  =  encoded_jwt.split(" ")[1]
+	
+	try:
+		decoded = jwt.decode(
+			encoded.jwt, os.environ.get("JWT_SECRET"), algorithm = ["HS256"])
+	except:
+		return "Not authorized", 403
+	return  decoded, 200
+
 
 def createJWT(username, secret, authz):
 	return jwt.encode(
