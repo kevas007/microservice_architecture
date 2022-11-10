@@ -1,4 +1,4 @@
-apiVersion: v
+apiVersion: v1
 kind: ConfigMap 
 metadata:
   name:  auth-configmap
