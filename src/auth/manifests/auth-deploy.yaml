@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployement
+metadata:
+  name:  auth
+  labels: 
+    app: auth
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 3
+    template:
+      metadate:
+        matchLabels: 
+          app: auth
+      spec:
+          containers:
+            - name:  auth
+              image:  kevin/
+              ports:
+                - containerPort: 5000
+              envform :
+                - configMappRef:
+                  name : auth-configmap
+                - secretRef:
+                  name:  auth-secret
