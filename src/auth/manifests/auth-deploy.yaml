@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: kevas01/docker_python_kub
+          image: sweasytech/auth
           ports:
             - containerPort: 5000
           envFrom:
